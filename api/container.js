@@ -8,6 +8,6 @@ module.exports = {
         return connection.query(OPEN_CONTAINER, [time, id])
             .then(function() {
                 return true;
-            })
+            });
     }
 };
