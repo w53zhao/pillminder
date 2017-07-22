@@ -16,7 +16,7 @@ app.get('/containers/:id', function(req, res) {
             res.send({
                 'success': true,
                 'data': containers
-            })
+            });
         })
         .catch(function(error) {
             res.send({
@@ -24,7 +24,27 @@ app.get('/containers/:id', function(req, res) {
                 'error': error
             });
         });
-}) ;
+});
+
+app.get('/remind/:id', function(req, res) {
+   var id = req.params.id;
+
+   container.remind(id)
+       .then(function(remind) {
+           res.send({
+               'success': true,
+               'data': {
+                   'remind': remind
+               }
+           });
+       })
+       .catch(function(error) {
+            res.send({
+                'success': false,
+                'error': error
+            });
+       });
+});
 
 app.post('/open/:id/:time', function(req, res) {
     var id = req.params.id;
