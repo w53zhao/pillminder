@@ -12,6 +12,6 @@ create table "container" (
     pill_type TEXT,
     reminder_time TIME NOT NULL,
     frequency INTEGER NOT NULL,
-    last_opened INTEGER,
+    last_opened TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY(user_id) REFERENCES user_info(id) ON DELETE CASCADE
 );

@@ -1,12 +1,12 @@
 const db = require('../database/config');
 const connection = db.getConnection();
 
-const OPEN_CONTAINER = "UPDATE container SET last_opened = $1 WHERE id = $2";
+const OPEN_CONTAINER = "UPDATE container SET last_opened = NOW() WHERE id = $1";
 const REMIND = "SELECT last_opened, frequency FROM container WHERE id = $1";
 
 module.exports = {
     open: function(id, time) {
-        return connection.query(OPEN_CONTAINER, [time, id])
+        return connection.query(OPEN_CONTAINER, [id])
             .then(function() {
                 return true;
             });

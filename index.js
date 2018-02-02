@@ -46,11 +46,11 @@ app.get('/remind/:id', function(req, res) {
        });
 });
 
-app.post('/open/:id/:time', function(req, res) {
+app.post('/:id/open', function(req, res) {
     var id = req.params.id;
     var time = req.params.time;
 
-    container.open(id, time)
+    container.open(id)
         .then(function() {
             res.send({
                 'success': true
