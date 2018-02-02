@@ -4,8 +4,25 @@ const bodyParser = require('body-parser');
 const container = require('./api/container');
 const user = require('./api/user');
 
-app.get('/', function(req, res) {
-    res.send("Hello World!");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.post('/login', function(req, res) {
+   var email = req.body.email;
+   var password = req.body.password;
+
+   user.login(email, password)
+       .then(function(success) {
+           res.send({
+               'success': success
+           });
+       })
+       .catch(function(error) {
+           res.send({
+               'success': false,
+               'error': error
+           });
+       });
 });
 
 app.get('/containers/:id', function(req, res) {
