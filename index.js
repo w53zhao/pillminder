@@ -26,16 +26,14 @@ app.get('/containers/:id', function(req, res) {
         });
 });
 
-app.get('/remind/:id', function(req, res) {
+app.get('/:id/remind', function(req, res) {
    var id = req.params.id;
 
    container.remind(id)
        .then(function(remind) {
            res.send({
                'success': true,
-               'data': {
-                   'remind': remind
-               }
+               'remind': remind
            });
        })
        .catch(function(error) {
