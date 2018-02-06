@@ -16,38 +16,26 @@ app.post('/login', function(req, res) {
 
    user.login(email, password)
        .then(function(userId) {
-           res.status(HttpStatus.OK).send({
-               'user_id': userId
-           });
+           res.status(HttpStatus.OK).send({'user_id': userId});
        })
        .catch(function(error) {
            if (error instanceof userError) {
-               res.status(error.status).send({
-                   'error': error.error
-               });
+               res.status(error.status).send({'error': error.error});
            } else {
-               res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-                   'error': error
-               });
+               res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
            }
        });
 });
 
-app.get('/containers/:id', function(req, res) {
+app.get('/:id/containers', function(req, res) {
     var id = req.params.id;
 
     user.getContainers(id)
         .then(function(containers) {
-            res.send({
-                'success': true,
-                'data': containers
-            });
+            res.status(HttpStatus.OK).send({'containers': containers});
         })
         .catch(function(error) {
-            res.send({
-                'success': false,
-                'error': error
-            });
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
         });
 });
 
@@ -56,16 +44,10 @@ app.get('/:id/remind', function(req, res) {
 
    container.remind(id)
        .then(function(remind) {
-           res.send({
-               'success': true,
-               'remind': remind
-           });
+           res.status(HttpStatus.OK).send({'remind': remind});
        })
        .catch(function(error) {
-            res.send({
-                'success': false,
-                'error': error
-            });
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
        });
 });
 
@@ -77,9 +59,7 @@ app.post('/:id/open', function(req, res) {
             res.status(HttpStatus.OK).send();
         })
         .catch(function(error) {
-            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
-                'error': error
-            });
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
         });
 });
 

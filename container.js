@@ -1,7 +1,7 @@
 function Container(data) {
     this.id = data.id;
-    this.pillType = data.pill_type;
-    this.reminderTime = data.reminder_time;
+    this.pill_type = data.pill_type;
+    this.reminder_time = data.reminder_time;
     this.frequency = data.frequency;
 }
 
