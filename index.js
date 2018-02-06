@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const container = require('./api/container');
 const user = require('./api/user');
 
+var HttpStatus = require('http-status-codes');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -63,19 +65,13 @@ app.get('/:id/remind', function(req, res) {
 
 app.post('/:id/open', function(req, res) {
     var id = req.params.id;
-    var time = req.params.time;
 
     container.open(id)
         .then(function() {
-            res.send({
-                'success': true
-            });
+            res.status(HttpStatus.OK).send();
         })
         .catch(function(error) {
-            res.send({
-                'success': false,
-                'error': error
-            });
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error);
         });
 });
 
