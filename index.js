@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const container = require('./api/container');
 const user = require('./api/user');
+const userError = require('./userError');
 
 var HttpStatus = require('http-status-codes');
 
@@ -14,16 +15,21 @@ app.post('/login', function(req, res) {
    var password = req.body.password;
 
    user.login(email, password)
-       .then(function(success) {
-           res.send({
-               'success': success
+       .then(function(userId) {
+           res.status(HttpStatus.OK).send({
+               'user_id': userId
            });
        })
        .catch(function(error) {
-           res.send({
-               'success': false,
-               'error': error
-           });
+           if (error instanceof userError) {
+               res.status(error.status).send({
+                   'error': error.error
+               });
+           } else {
+               res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+                   'error': error
+               });
+           }
        });
 });
 
@@ -71,7 +77,9 @@ app.post('/:id/open', function(req, res) {
             res.status(HttpStatus.OK).send();
         })
         .catch(function(error) {
-            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error);
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+                'error': error
+            });
         });
 });
 
