@@ -47,7 +47,16 @@ app.post('/login', function(req, res) {
 });
 
 app.post('/:id/deviceToken', function(req, res) {
-    
+    var id = req.params.id;
+    var deviceToken = req.body.device_token;
+
+    user.addDeviceToken(id, deviceToken)
+        .then(function(success) {
+            res.status(HttpStatus.OK).send();
+        })
+        .catch(function(error) {
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({"error": error});
+        });
 });
 
 app.get('/:id/deviceToken', function(req, res) {

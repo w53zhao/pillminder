@@ -4,10 +4,11 @@ const Container = require('../container');
 const UserError = require('../userError');
 const HttpStatus = require('http-status-codes');
 
-const SIGN_UP = "INSERT INTO user_info (first_name, last_name, email, password) VALUES($1, $2, $3, $4) RETURNING id";
+const SIGN_UP = "INSERT INTO user_info (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING id";
+const ADD_DEVICE_TOKEN = "INSERT INTO device_token (id, device_token) VALUES ($1, $2)";
 
 const GET_PASSWORD = "SELECT password, id FROM user_info WHERE email = $1";
-const GET_DEVICE_TOKEN = "SELECT device_token FROM user_info WHERE id = $1";
+const GET_DEVICE_TOKEN = "SELECT device_token FROM device_token WHERE id = $1";
 const GET_CONTAINERS = "SELECT * FROM container WHERE user_id = $1";
 
 module.exports = {
@@ -35,6 +36,13 @@ module.exports = {
                 } else {
                     return rows[0].id;
                 }
+            });
+    },
+
+    addDeviceToken: function(id, deviceToken) {
+        return connection.query(ADD_DEVICE_TOKEN, [id, deviceToken])
+            .then(function() {
+                return true;
             });
     },
 
