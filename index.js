@@ -10,6 +10,22 @@ var HttpStatus = require('http-status-codes');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/signup/checkEmail', function(req, res) {
+    var email = req.query.email;
+    
+    user.checkEmail(email)
+        .then(function(available) {
+            if (available) {
+                res.status(HttpStatus.OK).send();
+            } else {
+                res.status(HttpStatus.CONFLICT).send();
+            }
+        })
+        .catch(function(error) {
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
+        });
+}) ;
+
 app.post('/signup', function(req, res) {
     var firstName = req.body.first_name;
     var lastName = req.body.last_name;
@@ -21,11 +37,7 @@ app.post('/signup', function(req, res) {
             res.status(HttpStatus.OK).send({'user_id': userId});
         })
         .catch(function(error) {
-            if (error instanceof  userError) {
-                res.status(error.status).send({'error': error.error});
-            } else {
-                res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
-            }
+            res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
         });
 });
 

@@ -7,22 +7,24 @@ const HttpStatus = require('http-status-codes');
 const SIGN_UP = "INSERT INTO user_info (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING id";
 const ADD_DEVICE_TOKEN = "INSERT INTO device_token (id, device_token) VALUES ($1, $2)";
 
+const CHECK_EMAIL = "SELECT id FROM user_info WHERE email = $1";
 const GET_PASSWORD = "SELECT password, id FROM user_info WHERE email = $1";
 const GET_DEVICE_TOKEN = "SELECT device_token FROM device_token WHERE id = $1";
 const GET_CONTAINERS = "SELECT * FROM container WHERE user_id = $1";
 
 module.exports = {
-    signup: function(firstName, lastName, email, password) {
-        return connection.query(GET_PASSWORD, [email])
+    checkEmail: function(email) {
+        return connection.query(CHECK_EMAIL, [email])
             .then(function(rows) {
-                if (rows.length != 0) {
-                    throw new UserError(HttpStatus.CONFLICT, "EMAIL_TAKEN");
-                } else {
-                    return connection.query(SIGN_UP, [firstName, lastName, email, password])
-                        .then(function(rows) {
-                            return rows[0].id;
-                        });
-                }
+                if (rows.length == 0) return true;
+                return false;
+            });
+    },
+
+    signup: function(firstName, lastName, email, password) {
+        return connection.query(SIGN_UP, [firstName, lastName, email, password])
+            then(function(rows) {
+                return rows[0].id;
             });
     },
 
