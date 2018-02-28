@@ -3,7 +3,8 @@ create table "user_info" (
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     email TEXT NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    device_token TEXT NOT NULL
 );
 
 create table "container" (

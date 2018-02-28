@@ -27,6 +27,22 @@ app.post('/login', function(req, res) {
        });
 });
 
+app.get('/:id/deviceToken', function(req, res) {
+    var id = req.params.id;
+
+    user.getDeviceToken(id)
+        .then(function(deviceToken) {
+            res.status(HttpStatus.OK).send({'device_token': deviceToken});
+        })
+        .catch(function(error) {
+            if (error instanceof  userError) {
+                res.status(error.status).send({'error': error.error});
+            } else {
+                res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
+            }
+        });
+});
+
 app.get('/:id/containers', function(req, res) {
     var id = req.params.id;
 
