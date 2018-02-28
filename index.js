@@ -10,6 +10,25 @@ var HttpStatus = require('http-status-codes');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.post('/signup', function(req, res) {
+    var firstName = req.body.first_name;
+    var lastName = req.body.last_name;
+    var email = req.body.email;
+    var password = req.body.password;
+
+    user.signup(firstName, lastName, email, password)
+        .then(function(userId) {
+            res.status(HttpStatus.OK).send({'user_id': userId});
+        })
+        .catch(function(error) {
+            if (error instanceof  userError) {
+                res.status(error.status).send({'error': error.error});
+            } else {
+                res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
+            }
+        });
+});
+
 app.post('/login', function(req, res) {
    var email = req.body.email;
    var password = req.body.password;
@@ -25,6 +44,10 @@ app.post('/login', function(req, res) {
                res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({'error': error});
            }
        });
+});
+
+app.post('/:id/deviceToken', function(req, res) {
+    
 });
 
 app.get('/:id/deviceToken', function(req, res) {

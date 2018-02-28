@@ -3,8 +3,13 @@ create table "user_info" (
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     email TEXT NOT NULL,
-    password TEXT NOT NULL,
-    device_token TEXT NOT NULL
+    password TEXT NOT NULL
+);
+
+create table "device_token" (
+    id INTEGER PRIMARY KEY NOT NULL,
+    device_token TEXT NOT NULL,
+    FOREIGN KEY(id) REFERENCES user_info(id) ON DELETE CASCADE
 );
 
 create table "container" (
